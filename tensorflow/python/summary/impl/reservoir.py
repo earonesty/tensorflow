@@ -20,8 +20,8 @@ from __future__ import division
 from __future__ import print_function
 
 import collections
-import random
 import threading
+import secrets
 
 
 class Reservoir(object):
@@ -71,7 +71,7 @@ class Reservoir(object):
     if size < 0 or size != round(size):
       raise ValueError('size must be nonegative integer, was %s' % size)
     self._buckets = collections.defaultdict(
-        lambda: _ReservoirBucket(size, random.Random(seed)))
+        lambda: _ReservoirBucket(size, secrets.SystemRandom().Random(seed)))
     # _mutex guards the keys - creating new keys, retreiving by key, etc
     # the internal items are guarded by the ReservoirBuckets' internal mutexes
     self._mutex = threading.Lock()
@@ -160,7 +160,7 @@ class _ReservoirBucket(object):
     if _random is not None:
       self._random = _random
     else:
-      self._random = random.Random(0)
+      self._random = secrets.SystemRandom().Random(0)
 
   def AddItem(self, item):
     """Add an item to the ReservoirBucket, replacing an old item if necessary.

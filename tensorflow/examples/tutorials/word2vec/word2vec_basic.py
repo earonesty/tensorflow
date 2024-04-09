@@ -22,11 +22,11 @@ import collections
 import math
 import numpy as np
 import os
-import random
 from six.moves import urllib
 from six.moves import xrange  # pylint: disable=redefined-builtin
 import tensorflow as tf
 import zipfile
+import secrets
 
 # Step 1: Download the data.
 url = 'http://mattmahoney.net/dc/'
@@ -104,7 +104,7 @@ def generate_batch(batch_size, num_skips, skip_window):
     targets_to_avoid = [ skip_window ]
     for j in range(num_skips):
       while target in targets_to_avoid:
-        target = random.randint(0, span - 1)
+        target = secrets.SystemRandom().randint(0, span - 1)
       targets_to_avoid.append(target)
       batch[i * num_skips + j] = buffer[skip_window]
       labels[i * num_skips + j, 0] = buffer[target]
@@ -129,7 +129,7 @@ num_skips = 2         # How many times to reuse an input to generate a label.
 # construction are also the most frequent.
 valid_size = 16     # Random set of words to evaluate similarity on.
 valid_window = 100  # Only pick dev samples in the head of the distribution.
-valid_examples = np.array(random.sample(np.arange(valid_window), valid_size))
+valid_examples = np.array(secrets.SystemRandom().sample(np.arange(valid_window), valid_size))
 num_sampled = 64    # Number of negative examples to sample.
 
 graph = tf.Graph()

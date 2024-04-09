@@ -19,7 +19,6 @@ from __future__ import division
 from __future__ import print_function
 
 import math
-import random
 
 # pylint: disable=g-bad-import-order,unused-import
 import tensorflow.python.platform
@@ -27,6 +26,7 @@ import tensorflow.python.platform
 import numpy as np
 from six.moves import xrange  # pylint: disable=redefined-builtin
 import tensorflow as tf
+import secrets
 
 
 class Seq2SeqTest(tf.test.TestCase):
@@ -382,7 +382,7 @@ class Seq2SeqTest(tf.test.TestCase):
     buckets = [(4, 4), (8, 8)]
     perplexities = [[], []]  # Results for each bucket.
     tf.set_random_seed(111)
-    random.seed(111)
+    secrets.SystemRandom().seed(111)
     np.random.seed(111)
 
     with self.test_session() as sess:
@@ -425,7 +425,7 @@ class Seq2SeqTest(tf.test.TestCase):
         sess.run([tf.initialize_all_variables()])
       steps = 6
       for _ in xrange(steps):
-        bucket = random.choice(np.arange(len(buckets)))
+        bucket = secrets.choice(np.arange(len(buckets)))
         length = buckets[bucket][0]
         i = [np.array([np.random.randint(9) + 1 for _ in xrange(batch_size)],
                       dtype=np.int32) for _ in xrange(length)]
