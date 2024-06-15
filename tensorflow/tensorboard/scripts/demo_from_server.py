@@ -55,7 +55,7 @@ class TensorBoardStaticSerializer(object):
       url += '?run={}'.format(run)
       if tag is not None:
         url += '&tag={}'.format(tag)
-    r = requests.get(url)
+    r = requests.get(url, timeout=60)
     if r.status_code != 200:
       raise IOError
     return r
@@ -90,7 +90,7 @@ class TensorBoardStaticSerializer(object):
       im['query'] = self.img_id
       path = '%s/individualImage/%d.png' % (self.path, self.img_id)
       self.img_id += 1
-      r = requests.get(self.server_address + 'individualImage?' + q)
+      r = requests.get(self.server_address + 'individualImage?' + q, timeout=60)
       if r.status_code != 200:
         raise IOError
       with open(path, 'wb') as f:
