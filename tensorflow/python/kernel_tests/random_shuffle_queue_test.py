@@ -17,8 +17,6 @@
 from __future__ import absolute_import
 from __future__ import division
 from __future__ import print_function
-
-import random
 import re
 import time
 
@@ -27,6 +25,7 @@ import tensorflow.python.platform
 import numpy as np
 from six.moves import xrange  # pylint: disable=redefined-builtin
 import tensorflow as tf
+import secrets
 
 
 class RandomShuffleQueueTest(tf.test.TestCase):
@@ -414,13 +413,13 @@ class RandomShuffleQueueTest(tf.test.TestCase):
   def testDequeueManyWithTensorParameter(self):
     with self.test_session():
       # Define a first queue that contains integer counts.
-      dequeue_counts = [random.randint(1, 10) for _ in range(100)]
+      dequeue_counts = [secrets.SystemRandom().randint(1, 10) for _ in range(100)]
       count_q = tf.RandomShuffleQueue(100, 0, tf.int32)
       enqueue_counts_op = count_q.enqueue_many((dequeue_counts,))
       total_count = sum(dequeue_counts)
 
       # Define a second queue that contains total_count elements.
-      elems = [random.randint(0, 100) for _ in range(total_count)]
+      elems = [secrets.SystemRandom().randint(0, 100) for _ in range(total_count)]
       q = tf.RandomShuffleQueue(
           total_count, 0, tf.int32, ((),))
       enqueue_elems_op = q.enqueue_many((elems,))

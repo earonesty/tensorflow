@@ -33,7 +33,6 @@ from __future__ import print_function
 
 import math
 import os
-import random
 import sys
 import time
 
@@ -46,6 +45,7 @@ import tensorflow as tf
 from tensorflow.models.rnn.translate import data_utils
 from tensorflow.models.rnn.translate import seq2seq_model
 from tensorflow.python.platform import gfile
+import secrets
 
 
 tf.app.flags.DEFINE_float("learning_rate", 0.5, "Learning rate.")
@@ -260,7 +260,7 @@ def self_test():
     data_set = ([([1, 1], [2, 2]), ([3, 3], [4]), ([5], [6])],
                 [([1, 1, 1, 1, 1], [2, 2, 2, 2, 2]), ([3, 3, 3], [5, 6])])
     for _ in xrange(5):  # Train the fake model for 5 steps.
-      bucket_id = random.choice([0, 1])
+      bucket_id = secrets.choice([0, 1])
       encoder_inputs, decoder_inputs, target_weights = model.get_batch(
           data_set, bucket_id)
       model.step(sess, encoder_inputs, decoder_inputs, target_weights,
