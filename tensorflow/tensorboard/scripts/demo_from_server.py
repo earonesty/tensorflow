@@ -24,6 +24,7 @@ import requests
 import os.path
 import shutil
 import six
+from security import safe_requests
 
 
 class TensorBoardStaticSerializer(object):
@@ -55,7 +56,7 @@ class TensorBoardStaticSerializer(object):
       url += '?run={}'.format(run)
       if tag is not None:
         url += '&tag={}'.format(tag)
-    r = requests.get(url)
+    r = safe_requests.get(url)
     if r.status_code != 200:
       raise IOError
     return r
@@ -90,7 +91,7 @@ class TensorBoardStaticSerializer(object):
       im['query'] = self.img_id
       path = '%s/individualImage/%d.png' % (self.path, self.img_id)
       self.img_id += 1
-      r = requests.get(self.server_address + 'individualImage?' + q)
+      r = safe_requests.get(self.server_address + 'individualImage?' + q)
       if r.status_code != 200:
         raise IOError
       with open(path, 'wb') as f:
